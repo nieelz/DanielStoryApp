@@ -25,4 +25,5 @@
     <string name="photo_feed">Photo Feed</string>
     <string name="preview_photo">Preview Photo</string>
     <string name="upload">Upload</string>
+    <string name="type_image_description">Type Image Description</string>
 </resources>

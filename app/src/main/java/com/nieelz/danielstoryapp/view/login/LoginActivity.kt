@@ -4,16 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.nieelz.danielstoryapp.database.local.user.UserLogin
 import com.nieelz.danielstoryapp.databinding.ActivityLoginBinding
-import com.nieelz.danielstoryapp.database.local.user.preferences.UserLogin
-import com.nieelz.danielstoryapp.database.local.user.preferences.UserPreferences
 import com.nieelz.danielstoryapp.database.remote.body.BodyLogin
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.main.MainActivity
@@ -58,7 +56,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginUser.observe(this) { user ->
             Toast.makeText(this, "Token = ${user.token}", Toast.LENGTH_SHORT).show()
             // save token here
-            // loginViewModel.putToken(user.token)
+            //loginViewModel.saveUser(UserLogin(user.name, user.userId, user.token, isLogin = true))
+
             AlertDialog.Builder(this).apply {
                 setTitle("Hi, ${user.name}!")
                 setMessage("You have successfully logged in.")

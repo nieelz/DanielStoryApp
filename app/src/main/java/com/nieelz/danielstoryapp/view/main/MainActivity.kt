@@ -10,13 +10,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.nieelz.danielstoryapp.R
 import com.nieelz.danielstoryapp.databinding.ActivityMainBinding
-import com.nieelz.danielstoryapp.database.local.user.preferences.UserPreferences
 import com.nieelz.danielstoryapp.repo.StoryRepository
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.add.StoryActivity
-import com.nieelz.danielstoryapp.view.welcome.WelcomeActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -24,11 +23,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var repository: StoryRepository
+    private lateinit var recycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        recycler = binding.rvStory
+
+//        MainViewModel.story().observe(this) {
+//            showUserData(it)
+//        }
+
+
 
         viewModel()
         binding.buttonPost.setOnClickListener {

@@ -9,8 +9,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.nieelz.danielstoryapp.databinding.ActivityRegisterBinding
-import com.nieelz.danielstoryapp.database.local.user.preferences.UserLogin
-import com.nieelz.danielstoryapp.database.local.user.preferences.UserPreferences
 import com.nieelz.danielstoryapp.database.remote.body.BodyRegister
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 
