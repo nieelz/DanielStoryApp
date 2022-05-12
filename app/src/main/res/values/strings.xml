@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">DanielStoryApp</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="registerStoryApp">Register StoryApp</string>
+    <string name="nameBig">Name</string>
+    <string name="name">name</string>
+    <string name="passwordBig">Password</string>
+    <string name="password">password</string>
+    <string name="emailBig">Email</string>
+    <string name="email">email</string>
+    <string name="icon">icon</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="send">send</string>
+    <string name="username">username</string>
+    <string name="hello">hello</string>
+    <string name="post">Post</string>
+    <string name="date">date</string>
+    <string name="description">description</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera_button">Camera Button</string>
+    <string name="viewfinder">viewfinder</string>
+    <string name="photo_feed">Photo Feed</string>
+    <string name="preview_photo">Preview Photo</string>
+    <string name="upload">Upload</string>
+</resources>
