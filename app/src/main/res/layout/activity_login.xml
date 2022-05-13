@@ -19,6 +19,7 @@
 
     <TextView
         android:id="@+id/emailTextView"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -29,6 +30,7 @@
 
     <com.nieelz.danielstoryapp.custom.EmailEditText
         android:id="@+id/emailTextInputLayout"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -48,6 +50,7 @@
 
     <TextView
         android:id="@+id/passwordTextView"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -58,6 +61,7 @@
 
     <com.nieelz.danielstoryapp.custom.PasswordEditText
         android:id="@+id/passwordTextInputLayout"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -80,6 +84,7 @@
 
     <Button
         android:id="@+id/buttonLogin"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
