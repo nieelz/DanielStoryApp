@@ -13,6 +13,7 @@ import retrofit2.http.*
 
 interface ApiService {
 
+
     @POST("/v1/login")
     fun loginStory(@Body bodyLogin: BodyLogin): Call<LoginResponse>
 
@@ -20,9 +21,7 @@ interface ApiService {
     fun registerStory(@Body body: BodyRegister): Call<RegisterResponse>
 
     @GET("/v1/stories")
-    suspend fun getAllStory(
-        @Header("Authorization") header: String
-    ): StoryResponse
+    fun getAllStory(@Header("Authorization") header: String): Call<StoryResponse>
 
     @Multipart
     @POST("/v1/stories/guest")

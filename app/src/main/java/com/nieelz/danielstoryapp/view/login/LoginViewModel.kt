@@ -38,12 +38,8 @@ class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
         })
     }
 
-
-//    fun saveUser(login: UserLogin){
-//        viewModelScope.launch {
-//            pref.saveUser(login)
-//        }
-//    }
-//
+    fun saveDataUserToLocal(userLogin: UserLogin) = viewModelScope.launch {
+        repository.saveUserToLocal(userLogin)
+    }
 
 }

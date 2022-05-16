@@ -1,6 +1,7 @@
 package com.nieelz.danielstoryapp.view.register
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nieelz.danielstoryapp.database.remote.body.BodyRegister
@@ -13,18 +14,16 @@ import retrofit2.Response
 
 class RegisterViewModel(private val repository: StoryRepository) : ViewModel() {
 
-
+    private var _isUserCreated  = MutableLiveData<Boolean>()
+    val isUserCreated get() = _isUserCreated
 
     fun register(bodyRegister: BodyRegister) = viewModelScope.launch{
             repository.registerStory(bodyRegister).enqueue(object : Callback<RegisterResponse>{
-                override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        response.body()?.let {
-                            Log.d("TAG", "onResponse: success ${it.message}")
-                        }
-                    } else {
-                        Log.d("TAG", "onResponse: failed = ${response.body()?.message}")
-                    }
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
+                    _isUserCreated.value = response.isSuccessful
                 }
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                     Log.d("TAG", "onResponse: onFailure = ${t.message}")

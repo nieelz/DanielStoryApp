@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -19,12 +20,10 @@ import com.nieelz.danielstoryapp.database.remote.body.BodyLogin
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.main.MainActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel: LoginViewModel by viewModels { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +54,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun viewModel() {
-        loginViewModel = ViewModelProvider(this, ViewModelFactory(this))[LoginViewModel::class.java]
+
 
         loginViewModel.loginUser.observe(this) { user ->
-            Toast.makeText(this, "Token = ${user.token}", Toast.LENGTH_SHORT).show()
-            // save token here
-            //loginViewModel.saveUser(UserLogin(user.name, user.userId, user.token, isLogin = true))
+//            Toast.makeText(this, "Token = ${user.token}", Toast.LENGTH_SHORT).show()
+            loginViewModel.saveDataUserToLocal(
+                UserLogin(
+                    user.name,
+                    user.userId,
+                    "Bearer "+user.token
+                )
+            )
 
             AlertDialog.Builder(this).apply {
                 setTitle("Hi, ${user.name}!")

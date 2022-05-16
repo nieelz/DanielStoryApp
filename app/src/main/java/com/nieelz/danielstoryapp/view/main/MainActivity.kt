@@ -6,57 +6,56 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.nieelz.danielstoryapp.R
+import com.nieelz.danielstoryapp.database.local.story.ListStoryItem
 import com.nieelz.danielstoryapp.databinding.ActivityMainBinding
 import com.nieelz.danielstoryapp.repo.StoryRepository
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.add.StoryActivity
+import com.nieelz.danielstoryapp.view.login.LoginActivity
+import com.nieelz.danielstoryapp.view.welcome.WelcomeActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels { ViewModelFactory(this) }
     private lateinit var binding: ActivityMainBinding
-    private lateinit var repository: StoryRepository
-    private lateinit var recycler: RecyclerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recycler = binding.rvStory
+        mainViewModel.getLocalUser()
 
-//        MainViewModel.story().observe(this) {
-//            showUserData(it)
-//        }
+        mainViewModel.user.observe(this) {
+            mainViewModel.getAllStories(it.token)
+            binding.nameTextView.text = getString(R.string.greeting, it.name)
+        }
 
+        mainViewModel.stories.observe(this) { populateDataStories(it)
+        }
 
-
-        viewModel()
         binding.buttonPost.setOnClickListener {
             startActivity(Intent(this, StoryActivity::class.java))
         }
     }
 
-    private fun viewModel() {
-        mainViewModel = ViewModelProvider(
-            this, ViewModelFactory(this))[MainViewModel::class.java]
 
-//        mainViewModel.use().observe(this) { user ->
-//            if (user.isLogin) {
-//                binding.nameTextView.text = getString(R.string.greeting, user.name)
-//            } else {
-//                startActivity(Intent(this, WelcomeActivity::class.java))
-//                finish()
-//            }
-//        }
+    private fun populateDataStories(it: List<ListStoryItem>) {
+        binding.rvStory.apply {
+            itemAnimator = DefaultItemAnimator()
+            adapter = StoryAdapter(this@MainActivity, it)
+        }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
@@ -66,7 +65,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_menu -> {
-//                mainViewModel.logout()
+                mainViewModel.logout().also {
+                    startActivity(Intent(this, WelcomeActivity::class.java))
+                    finish()
+                }
                 true
             }
             R.id.send_menu ->{

@@ -3,8 +3,11 @@ package com.nieelz.danielstoryapp.view.register
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -14,22 +17,42 @@ import androidx.lifecycle.ViewModelProvider
 import com.nieelz.danielstoryapp.databinding.ActivityRegisterBinding
 import com.nieelz.danielstoryapp.database.remote.body.BodyRegister
 import com.nieelz.danielstoryapp.view.ViewModelFactory
+import com.nieelz.danielstoryapp.view.login.LoginActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var registerViewModel: RegisterViewModel
+    private val registerViewModel: RegisterViewModel by viewModels { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel()
+
         registerButton()
+        registerViewModel.isUserCreated.observe(this){
+            if (it) goToLogin() else Toast.makeText(this, "Email already taken", Toast.LENGTH_SHORT).show()
+        }
+
         playAnimation()
+    }
+
+    private fun goToLogin() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Hello!")
+            setMessage("Your account has been successfully registered")
+            setPositiveButton("Continue") { _, _ ->
+                val intent = Intent(context, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            }
+            create()
+            show()
+        }
     }
 
     private fun registerButton() {
@@ -41,33 +64,22 @@ class RegisterActivity : AppCompatActivity() {
                 name.isEmpty() -> {
                     binding.nameTextInputLayout.error = "insert name"
                 }
-//                email.isEmpty() -> {
-//                    binding.emailTextInputLayout.error = "insert email"
-//                }
-//                password.isEmpty() -> {
-//                    binding.passwordTextInputLayout.error = "insert password"
-//                }password.length < 6 -> {
-//                    binding.passwordTextInputLayout.error = "password less than 6"
-//                }
+                email.isEmpty() -> {
+                    binding.emailTextInputLayout.error = "insert email"
+                }
+                password.isEmpty() -> {
+                    binding.passwordTextInputLayout.error = "insert password"
+                }password.length < 6 -> {
+                    binding.passwordTextInputLayout.error = "password less than 6"
+                }
                 else -> {
                     registerViewModel.register(BodyRegister(password, name, email))
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Hello!")
-                        setMessage("Your account has been successfully registered")
-                        setPositiveButton("Continue") { _, _ ->
-                            finish()
-                        }
-                        create()
-                        show()
-                    }
                 }
             }
         }
     }
 
-    private fun viewModel() {
-        registerViewModel = ViewModelProvider(this, ViewModelFactory(this))[RegisterViewModel::class.java]
-    }
+
 
 
     private fun playAnimation() {
