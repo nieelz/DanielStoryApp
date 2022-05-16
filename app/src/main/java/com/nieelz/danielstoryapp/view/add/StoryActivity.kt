@@ -16,6 +16,9 @@ import androidx.core.content.FileProvider
 import com.nieelz.danielstoryapp.database.remote.response.FileUploadResponse
 import com.nieelz.danielstoryapp.database.remote.retrofit.ApiConfig
 import com.nieelz.danielstoryapp.databinding.ActivityStoryBinding
+import com.nieelz.danielstoryapp.view.main.MainActivity
+import com.nieelz.danielstoryapp.view.register.RegisterActivity
+import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -34,9 +37,11 @@ class StoryActivity : AppCompatActivity() {
 
     companion object {
         const val CAMERA_X_RESULT = 200
+
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -54,6 +59,7 @@ class StoryActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
@@ -126,12 +132,14 @@ class StoryActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this@StoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
         }
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
 
-    private var getFile: File? = null
+
 
     //Camera Intent
+    private var getFile: File? = null
     private fun startCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.resolveActivity(packageManager)
@@ -153,19 +161,13 @@ class StoryActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
-            getFile = myFile
-            val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
-
             val result = rotateBitmap(
                 BitmapFactory.decodeFile(myFile.path),
-                isBackCamera)
-
+                true
+            )
             binding.previewImageView.setImageBitmap(result)
         }
     }
-
-
-
 
 
 
@@ -181,7 +183,6 @@ class StoryActivity : AppCompatActivity() {
             binding.previewImageView.setImageURI(selectedImg)
         }
     }
-
 
     private fun startGallery() {
         val intent = Intent()

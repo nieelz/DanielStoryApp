@@ -7,6 +7,7 @@ import com.nieelz.danielstoryapp.repo.Injection
 import com.nieelz.danielstoryapp.view.login.LoginViewModel
 import com.nieelz.danielstoryapp.view.main.MainViewModel
 import com.nieelz.danielstoryapp.view.register.RegisterViewModel
+import com.nieelz.danielstoryapp.view.welcome.WelcomeViewModel
 
 
 class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInstanceFactory() {
@@ -22,6 +23,9 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInst
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(Injection.provideRepository(context)) as T
+            }
+            modelClass.isAssignableFrom(WelcomeViewModel::class.java) -> {
+                WelcomeViewModel(Injection.provideRepository(context)) as T
             }
 
             else -> {
