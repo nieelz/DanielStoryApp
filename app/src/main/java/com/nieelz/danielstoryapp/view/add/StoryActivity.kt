@@ -10,20 +10,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.nieelz.danielstoryapp.database.remote.response.FileUploadResponse
+import com.nieelz.danielstoryapp.database.local.user.UserLogin
 import com.nieelz.danielstoryapp.database.remote.retrofit.ApiConfig
 import com.nieelz.danielstoryapp.databinding.ActivityStoryBinding
-import com.nieelz.danielstoryapp.view.main.MainActivity
-import com.nieelz.danielstoryapp.view.register.RegisterActivity
-import kotlinx.coroutines.delay
-import okhttp3.MediaType.Companion.toMediaType
+import com.nieelz.danielstoryapp.repo.StoryRepository
+import com.nieelz.danielstoryapp.view.ViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,37 +31,10 @@ import java.io.File
 class StoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStoryBinding
+    private lateinit var repository: StoryRepository
+    private lateinit var user : UserLogin
 
-
-    companion object {
-        const val CAMERA_X_RESULT = 200
-
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (!allPermissionsGranted()) {
-                Toast.makeText(
-                    this,
-                    "Tidak mendapatkan permission.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                finish()
-            }
-        }
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
+    private val storyViewModel: StoryViewModel by viewModels { ViewModelFactory(this) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,7 +72,8 @@ class StoryActivity : AppCompatActivity() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
-            val description = "Ini adalah deksripsi gambar".toRequestBody("text/plain".toMediaType())
+//            val user = user.token
+            val description = binding.descTextInput.text.toString()
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "photo",
@@ -109,30 +81,15 @@ class StoryActivity : AppCompatActivity() {
                 requestImageFile
             )
 
-            val service = ApiConfig.getApiService().postImage(imageMultipart, description)
+            storyViewModel.postStory(imageMultipart, description)
 
-            service.enqueue(object : Callback<FileUploadResponse> {
-                override fun onResponse(
-                    call: Call<FileUploadResponse>,
-                    response: Response<FileUploadResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null && !responseBody.error) {
-                            Toast.makeText(this@StoryActivity, responseBody.message, Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this@StoryActivity, response.message(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                override fun onFailure(call: Call<FileUploadResponse>, t: Throwable) {
-                    Toast.makeText(this@StoryActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
-                }
-            })
+
+
         } else {
             Toast.makeText(this@StoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
         }
-        startActivity(Intent(this, MainActivity::class.java))
+
+//        startActivity(Intent(this, MainActivity::class.java))
     }
 
 
@@ -191,6 +148,39 @@ class StoryActivity : AppCompatActivity() {
         val chooser = Intent.createChooser(intent, "Choose a Picture")
         launcherIntentGallery.launch(chooser)
     }
+
+
+
+
+    companion object {
+        const val CAMERA_X_RESULT = 200
+
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (!allPermissionsGranted()) {
+                Toast.makeText(
+                    this,
+                    "Tidak mendapatkan permission.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
+        }
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
 
 
 

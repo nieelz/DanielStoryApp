@@ -1,9 +1,11 @@
 package com.nieelz.danielstoryapp.view.login
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nieelz.danielstoryapp.database.local.user.UserLogin
-import com.nieelz.danielstoryapp.database.local.user.UserPreferences
 import com.nieelz.danielstoryapp.database.remote.body.BodyLogin
 import com.nieelz.danielstoryapp.database.remote.response.LoginResponse
 import com.nieelz.danielstoryapp.database.remote.response.LoginResult
@@ -32,6 +34,7 @@ class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
                     Log.d("TAG", "onResponse: failed = ${response.body()?.message}")
                 }
             }
+
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Log.d("TAG", "onResponse: onFailure = ${t.message}")
             }

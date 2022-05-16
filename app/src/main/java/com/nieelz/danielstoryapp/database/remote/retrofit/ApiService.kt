@@ -1,6 +1,6 @@
 package com.nieelz.danielstoryapp.database.remote.retrofit
 
-import com.nieelz.danielstoryapp.database.local.story.StoryResponse
+import com.nieelz.danielstoryapp.database.remote.response.StoryResponse
 import com.nieelz.danielstoryapp.database.remote.body.BodyLogin
 import com.nieelz.danielstoryapp.database.remote.body.BodyRegister
 import com.nieelz.danielstoryapp.database.remote.response.FileUploadResponse
@@ -29,5 +29,13 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
     ): Call<FileUploadResponse>
+
+    @Multipart
+    @POST("/v1/stories")
+    suspend fun postStory(
+        @Header("Authorization") header: String,
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+    ): Call<RegisterResponse>
 
 }

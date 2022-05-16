@@ -7,12 +7,12 @@ import com.nieelz.danielstoryapp.repo.StoryRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class WelcomeViewModel(private val repository: StoryRepository): ViewModel() {
+class WelcomeViewModel(private val repository: StoryRepository) : ViewModel() {
 
     private val _isLogin = MutableLiveData<Boolean>()
     val isLogin get() = _isLogin
 
-    fun getUserLocal(){
+    fun getUserLocal() {
         viewModelScope.launch {
             repository.getLocalUser().collect {
                 _isLogin.value = it.token.isNotBlank()

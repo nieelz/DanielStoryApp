@@ -2,21 +2,15 @@ package com.nieelz.danielstoryapp.view.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import com.nieelz.danielstoryapp.database.local.user.UserLogin
-import com.nieelz.danielstoryapp.databinding.ActivityLoginBinding
 import com.nieelz.danielstoryapp.database.remote.body.BodyLogin
+import com.nieelz.danielstoryapp.databinding.ActivityLoginBinding
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.main.MainActivity
 
@@ -62,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                 UserLogin(
                     user.name,
                     user.userId,
-                    "Bearer "+user.token
+                    "Bearer " + user.token
                 )
             )
 
@@ -83,8 +77,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView3, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
@@ -92,10 +84,14 @@ class LoginActivity : AppCompatActivity() {
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
-        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailTextInputLayout, View.ALPHA, 1f).setDuration(500)
-        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
-        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordTextInputLayout, View.ALPHA, 1f).setDuration(500)
+        val emailTextView =
+            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
+        val emailEditTextLayout =
+            ObjectAnimator.ofFloat(binding.emailTextInputLayout, View.ALPHA, 1f).setDuration(500)
+        val passwordTextView =
+            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
+        val passwordEditTextLayout =
+            ObjectAnimator.ofFloat(binding.passwordTextInputLayout, View.ALPHA, 1f).setDuration(500)
         val login = ObjectAnimator.ofFloat(binding.buttonLogin, View.ALPHA, 1f).setDuration(500)
 
 
@@ -110,9 +106,6 @@ class LoginActivity : AppCompatActivity() {
             startDelay = 500
         }.start()
     }
-
-
-
 
 
 }

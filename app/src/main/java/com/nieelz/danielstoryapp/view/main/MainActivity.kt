@@ -1,25 +1,17 @@
 package com.nieelz.danielstoryapp.view.main
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.RecyclerView
 import com.nieelz.danielstoryapp.R
-import com.nieelz.danielstoryapp.database.local.story.ListStoryItem
+import com.nieelz.danielstoryapp.database.remote.response.ListStoryItem
 import com.nieelz.danielstoryapp.databinding.ActivityMainBinding
-import com.nieelz.danielstoryapp.repo.StoryRepository
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.add.StoryActivity
-import com.nieelz.danielstoryapp.view.login.LoginActivity
 import com.nieelz.danielstoryapp.view.welcome.WelcomeActivity
 
 
@@ -40,7 +32,8 @@ class MainActivity : AppCompatActivity() {
             binding.nameTextView.text = getString(R.string.greeting, it.name)
         }
 
-        mainViewModel.stories.observe(this) { populateDataStories(it)
+        mainViewModel.stories.observe(this) {
+            populateDataStories(it)
         }
 
         binding.buttonPost.setOnClickListener {
@@ -62,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.option_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_menu -> {
@@ -71,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
-            R.id.send_menu ->{
+            R.id.send_menu -> {
                 startActivity(Intent(this, StoryActivity::class.java))
                 true
             }

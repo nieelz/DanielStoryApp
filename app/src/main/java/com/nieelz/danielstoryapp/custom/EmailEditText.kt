@@ -21,24 +21,29 @@ class EmailEditText : TextInputLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init()
     }
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
 
     private fun init() {
-        addOnEditTextAttachedListener{
+        addOnEditTextAttachedListener {
             textEmail = it.editText!!
 
-            textEmail.addTextChangedListener(object : TextWatcher{
+            textEmail.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if (p0!!.length == 0){
+                    if (p0!!.length == 0) {
                         it.error = "insert email"
-                    }else{
+                    } else {
                         it.error = null
                         valid = true
                     }

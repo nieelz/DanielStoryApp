@@ -26,7 +26,6 @@ fun createCustomTempFile(context: Context): File {
 }
 
 
-
 fun uriToFile(selectedImg: Uri, context: Context): File {
     val contentResolver: ContentResolver = context.contentResolver
     val myFile = createCustomTempFile(context)

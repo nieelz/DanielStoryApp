@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.nieelz.danielstoryapp.repo.Injection
+import com.nieelz.danielstoryapp.view.add.StoryViewModel
 import com.nieelz.danielstoryapp.view.login.LoginViewModel
 import com.nieelz.danielstoryapp.view.main.MainViewModel
 import com.nieelz.danielstoryapp.view.register.RegisterViewModel
@@ -27,6 +28,10 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInst
             modelClass.isAssignableFrom(WelcomeViewModel::class.java) -> {
                 WelcomeViewModel(Injection.provideRepository(context)) as T
             }
+            modelClass.isAssignableFrom(StoryViewModel::class.java) -> {
+                StoryViewModel(Injection.provideRepository(context)) as T
+            }
+
 
             else -> {
                 throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -1,4 +1,4 @@
-package com.nieelz.danielstoryapp.database.local.story
+package com.nieelz.danielstoryapp.database.remote.response
 
 import com.google.gson.annotations.SerializedName
 

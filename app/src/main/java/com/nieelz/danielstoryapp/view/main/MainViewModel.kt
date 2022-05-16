@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nieelz.danielstoryapp.database.local.story.ListStoryItem
-import com.nieelz.danielstoryapp.database.local.story.StoryResponse
+import com.nieelz.danielstoryapp.database.remote.response.ListStoryItem
+import com.nieelz.danielstoryapp.database.remote.response.StoryResponse
 import com.nieelz.danielstoryapp.database.local.user.UserLogin
 import com.nieelz.danielstoryapp.repo.StoryRepository
 import kotlinx.coroutines.flow.collect
@@ -16,7 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainViewModel(private val repository: StoryRepository): ViewModel() {
+class MainViewModel(private val repository: StoryRepository) : ViewModel() {
 
     private var _user = MutableLiveData<UserLogin>()
     val user get() = _user
@@ -46,7 +46,6 @@ class MainViewModel(private val repository: StoryRepository): ViewModel() {
             }
         }
     }
-
 
 
     fun getLocalUser() {
