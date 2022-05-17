@@ -22,9 +22,14 @@ class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
     private val _loginUser = MutableLiveData<LoginResult>()
     val loginUser: LiveData<LoginResult> = _loginUser
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun login(bodyLogin: BodyLogin) = viewModelScope.launch {
+        _isLoading.value = true
         repository.loginStory(bodyLogin).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                _isLoading.value = false
                 if (response.isSuccessful && response.body() != null) {
                     response.body()?.let {
                         _loginUser.value = it.loginResult
@@ -36,6 +41,7 @@ class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _isLoading.value = false
                 Log.d("TAG", "onResponse: onFailure = ${t.message}")
             }
         })

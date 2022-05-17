@@ -2,6 +2,7 @@ package com.nieelz.danielstoryapp.view.main
 
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,24 +25,34 @@ class MainViewModel(private val repository: StoryRepository) : ViewModel() {
     private var _stories = MutableLiveData<List<ListStoryItem>>()
     val stories get() = _stories
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun getAllStories(token: String) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 repository.getAllStories(token).enqueue(object : Callback<StoryResponse> {
                     override fun onResponse(
                         call: Call<StoryResponse>,
                         response: Response<StoryResponse>
                     ) {
                         if (response.isSuccessful) response.body()?.listStory?.let {
+                            _isLoading.value = false
                             _stories.value = it
-                        } else Log.d("TAG", "onResponse: failed = ${response.body()?.message}")
+                        } else {
+                            _isLoading.value = false
+                            Log.d("TAG", "onResponse: failed = ${response.body()?.message}")
+                        }
                     }
 
                     override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                        _isLoading.value = false
                         Log.d("TAG", "onFailure: ${t.message}")
                     }
                 })
             } catch (e: Exception) {
+                _isLoading.value = false
                 Log.d("TAG", "onFailure: ${e.message}")
             }
         }

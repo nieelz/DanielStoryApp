@@ -19,7 +19,6 @@
 
     <Button
         android:id="@+id/buttonLogin"
-        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="256dp"
@@ -30,7 +29,6 @@
 
     <Button
         android:id="@+id/buttonRegister"
-        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register"

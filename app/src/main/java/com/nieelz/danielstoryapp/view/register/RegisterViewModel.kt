@@ -1,6 +1,7 @@
 package com.nieelz.danielstoryapp.view.register
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +18,11 @@ class RegisterViewModel(private val repository: StoryRepository) : ViewModel() {
     private var _isUserCreated = MutableLiveData<Boolean>()
     val isUserCreated get() = _isUserCreated
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun register(bodyRegister: BodyRegister) = viewModelScope.launch {
+        _isLoading.value = true
         repository.registerStory(bodyRegister).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
@@ -27,6 +32,7 @@ class RegisterViewModel(private val repository: StoryRepository) : ViewModel() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                _isLoading.value = false
                 Log.d("TAG", "onResponse: onFailure = ${t.message}")
             }
         })

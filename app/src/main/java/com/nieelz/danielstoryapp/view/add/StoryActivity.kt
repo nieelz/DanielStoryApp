@@ -14,11 +14,15 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import com.nieelz.danielstoryapp.database.local.user.UserLogin
+import com.nieelz.danielstoryapp.database.local.user.UserPreferences
 import com.nieelz.danielstoryapp.database.remote.retrofit.ApiConfig
 import com.nieelz.danielstoryapp.databinding.ActivityStoryBinding
 import com.nieelz.danielstoryapp.repo.StoryRepository
 import com.nieelz.danielstoryapp.view.ViewModelFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -31,13 +35,12 @@ import java.io.File
 class StoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStoryBinding
-    private lateinit var repository: StoryRepository
-    private lateinit var user : UserLogin
-
     private val storyViewModel: StoryViewModel by viewModels { ViewModelFactory(this) }
 
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.title = "Post Story"
         super.onCreate(savedInstanceState)
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,28 +54,21 @@ class StoryActivity : AppCompatActivity() {
             )
         }
 
+        storyViewModel.getLocalUser()
 
-        binding.buttonCamera.setOnClickListener {
-            startCamera()
-        }
+        storyViewModel.user.observe(this){ token = it.token }
 
-        binding.buttonGallery.setOnClickListener {
-            startGallery()
-        }
-        binding.buttonUpload.setOnClickListener {
-            startUpload()
-        }
+        binding.buttonCamera.setOnClickListener { startCamera() }
+        binding.buttonGallery.setOnClickListener { startGallery() }
+        binding.buttonUpload.setOnClickListener { startUpload() }
     }
 
-    private fun reduceFileImage(file: File): File {
-        return file
-    }
 
     private fun startUpload() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
-//            val user = user.token
+
             val description = binding.descTextInput.text.toString()
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -81,15 +77,24 @@ class StoryActivity : AppCompatActivity() {
                 requestImageFile
             )
 
-            storyViewModel.postStory(imageMultipart, description)
-
-
+            storyViewModel.postStory(token, imageMultipart, description) { isSuccess, message ->
+                if (isSuccess) {
+                    setResult(RESULT_OK)
+                    finish()
+                }
+                Toast.makeText(
+                    this,
+                    if (isSuccess) "Cerita berhasil diposting" else message, Toast.LENGTH_SHORT
+                ).show()
+            }
 
         } else {
-            Toast.makeText(this@StoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this@StoryActivity,
+                "Silakan masukkan berkas gambar terlebih dahulu.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-
-//        startActivity(Intent(this, MainActivity::class.java))
     }
 
 
@@ -118,18 +123,21 @@ class StoryActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
-            val result = rotateBitmap(
-                BitmapFactory.decodeFile(myFile.path),
-                true
-            )
-            binding.previewImageView.setImageBitmap(result)
+            val result = reduceFileImage(myFile)
+            getFile = result
+
+//            val result2 = rotateBitmap(
+//                BitmapFactory.decodeFile(myFile.path),
+//                true
+//            )
+
+            binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(result.path))
         }
     }
 
 
 
     //gallery
-
     private val launcherIntentGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -153,8 +161,6 @@ class StoryActivity : AppCompatActivity() {
 
 
     companion object {
-        const val CAMERA_X_RESULT = 200
-
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }

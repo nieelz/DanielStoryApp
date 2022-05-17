@@ -20,14 +20,23 @@ class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        loginViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
+        setContentToTransparent()
         viewModel()
         loginButton()
         playAnimation()
     }
+
+
 
     private fun loginButton() {
         binding.buttonLogin.setOnClickListener {
@@ -51,7 +60,6 @@ class LoginActivity : AppCompatActivity() {
 
 
         loginViewModel.loginUser.observe(this) { user ->
-//            Toast.makeText(this, "Token = ${user.token}", Toast.LENGTH_SHORT).show()
             loginViewModel.saveDataUserToLocal(
                 UserLogin(
                     user.name,
@@ -76,6 +84,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+
+    private fun setContentToTransparent() {
+        binding.emailTextView.alpha = 0f
+        binding.emailTextInputLayout.alpha = 0f
+        binding.passwordTextView.alpha = 0f
+        binding.passwordTextInputLayout.alpha = 0f
+        binding.buttonLogin.alpha = 0f
+    }
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView3, View.TRANSLATION_X, -30f, 30f).apply {
@@ -105,6 +122,10 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 

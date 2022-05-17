@@ -3,12 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_detail.xml" value="0.26575342465753427" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_register.xml" value="0.2328125" />
+        <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_story.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/activity_welcome.xml" value="0.1590909090909091" />
         <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/layout/row_story.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/danie/AndroidStudioProjects/DanielStoryApp/app/src/main/res/menu/option_menu.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

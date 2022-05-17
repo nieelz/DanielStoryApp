@@ -26,9 +26,15 @@ class RegisterActivity : AppCompatActivity() {
     private val registerViewModel: RegisterViewModel by viewModels { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setContentToTransparent()
+
+        registerViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
 
         registerButton()
@@ -38,6 +44,17 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         playAnimation()
+    }
+
+    private fun setContentToTransparent() {
+        binding.titleTextView.alpha = 0f
+        binding.nameTextview.alpha = 0f
+        binding.nameTextInputLayout.alpha = 0f
+        binding.emailTextview.alpha = 0f
+        binding.emailTextInputLayout.alpha = 0f
+        binding.passwordTextview.alpha = 0f
+        binding.passwordTextInputLayout.alpha = 0f
+        binding.buttonDaftar.alpha = 0f
     }
 
     private fun goToLogin() {
@@ -119,5 +136,8 @@ class RegisterActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
 }
