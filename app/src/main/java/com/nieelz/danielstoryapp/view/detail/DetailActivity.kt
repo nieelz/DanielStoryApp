@@ -1,7 +1,7 @@
 package com.nieelz.danielstoryapp.view.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.nieelz.danielstoryapp.database.remote.response.ListStoryItem
 import com.nieelz.danielstoryapp.databinding.ActivityDetailBinding

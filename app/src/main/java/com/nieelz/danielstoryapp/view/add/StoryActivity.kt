@@ -5,30 +5,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.lifecycleScope
-import com.nieelz.danielstoryapp.database.local.user.UserLogin
-import com.nieelz.danielstoryapp.database.local.user.UserPreferences
-import com.nieelz.danielstoryapp.database.remote.retrofit.ApiConfig
 import com.nieelz.danielstoryapp.databinding.ActivityStoryBinding
-import com.nieelz.danielstoryapp.repo.StoryRepository
 import com.nieelz.danielstoryapp.view.ViewModelFactory
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 
@@ -56,7 +46,7 @@ class StoryActivity : AppCompatActivity() {
 
         storyViewModel.getLocalUser()
 
-        storyViewModel.user.observe(this){ token = it.token }
+        storyViewModel.user.observe(this) { token = it.token }
 
         binding.buttonCamera.setOnClickListener { startCamera() }
         binding.buttonGallery.setOnClickListener { startGallery() }
@@ -147,7 +137,6 @@ class StoryActivity : AppCompatActivity() {
         val chooser = Intent.createChooser(intent, "Choose a Picture")
         launcherIntentGallery.launch(chooser)
     }
-
 
 
     override fun onRequestPermissionsResult(

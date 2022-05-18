@@ -15,7 +15,8 @@ class StoryRepository(
     fun getAllStories(token: String) = serviceAPI.getAllStory(token)
     fun loginStory(bodyLogin: BodyLogin) = serviceAPI.loginStory(bodyLogin)
     fun registerStory(bodyRegister: BodyRegister) = serviceAPI.registerStory(bodyRegister)
-    fun postStory(token: String, file: MultipartBody.Part, description: RequestBody) = serviceAPI.postStory(token, file, description)
+    fun postStory(token: String, file: MultipartBody.Part, description: RequestBody) =
+        serviceAPI.postStory(token, file, description)
 
     suspend fun saveUserToLocal(userLogin: UserLogin) = userPreferences.saveUser(userLogin)
     fun getLocalUser() = userPreferences.getUser()

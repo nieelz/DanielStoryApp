@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nieelz.danielstoryapp.repo.StoryRepository
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class WelcomeViewModel(private val repository: StoryRepository) : ViewModel() {

@@ -1,16 +1,10 @@
 package com.nieelz.danielstoryapp.view.welcome
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.nieelz.danielstoryapp.databinding.ActivityWelcomeBinding
-import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.login.LoginActivity
-import com.nieelz.danielstoryapp.view.main.MainActivity
 import com.nieelz.danielstoryapp.view.register.RegisterActivity
 
 class WelcomeActivity : AppCompatActivity() {
@@ -36,8 +30,6 @@ class WelcomeActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
-
-
 
 
 }
