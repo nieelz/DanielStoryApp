@@ -41,7 +41,7 @@ class EmailEditText : TextInputLayout {
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if (p0!!.length == 0) {
+                    if (p0!!.isEmpty()) {
                         it.error = "insert email"
                     } else {
                         it.error = null

@@ -98,9 +98,6 @@ class StoryActivity : AppCompatActivity() {
     }
 
 
-
-
-    //Camera Intent
     private var getFile: File? = null
     private fun startCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -126,18 +123,12 @@ class StoryActivity : AppCompatActivity() {
             val result = reduceFileImage(myFile)
             getFile = result
 
-//            val result2 = rotateBitmap(
-//                BitmapFactory.decodeFile(myFile.path),
-//                true
-//            )
 
             binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(result.path))
         }
     }
 
 
-
-    //gallery
     private val launcherIntentGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -158,12 +149,6 @@ class StoryActivity : AppCompatActivity() {
     }
 
 
-
-
-    companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -187,9 +172,9 @@ class StoryActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-
-
-
-
+    companion object {
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
+    }
 
 }

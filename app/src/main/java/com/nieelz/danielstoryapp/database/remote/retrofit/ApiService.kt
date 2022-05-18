@@ -24,13 +24,6 @@ interface ApiService {
     fun getAllStory(@Header("Authorization") header: String): Call<StoryResponse>
 
     @Multipart
-    @POST("/v1/stories/guest")
-    fun postImage(
-        @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody,
-    ): Call<FileUploadResponse>
-
-    @Multipart
     @POST("/v1/stories")
     fun postStory(
         @Header("Authorization") header: String,

@@ -43,7 +43,7 @@ class PasswordEditText : TextInputLayout {
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if (p0!!.length == 0) {
+                    if (p0!!.isEmpty()) {
                         it.error = "insert password"
                     } else if (p0.length < 6) {
                         it.error = "below 6"

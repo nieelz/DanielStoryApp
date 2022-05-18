@@ -10,7 +10,7 @@ import com.nieelz.danielstoryapp.database.remote.retrofit.ApiConfig
 
 
 object Injection {
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     fun provideRepository(context: Context): StoryRepository {
         val serviceAPI = ApiConfig.getApiService()

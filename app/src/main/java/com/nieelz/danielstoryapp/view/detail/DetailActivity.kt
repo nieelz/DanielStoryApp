@@ -10,17 +10,11 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
-
-    companion object {
-        const val EXTRA_STORY = "extra_story"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.title = "Detail Story"
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         intent.extras?.getParcelable<ListStoryItem>(EXTRA_STORY)?.let {
             with(binding) {
@@ -29,8 +23,10 @@ class DetailActivity : AppCompatActivity() {
                 tvDesc.text = it.description
             }
         }
-
-
-
     }
+
+    companion object {
+        const val EXTRA_STORY = "extra_story"
+    }
+
 }
