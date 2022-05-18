@@ -1,5 +1,6 @@
 package com.nieelz.danielstoryapp.database.remote.retrofit
 
+import com.nieelz.danielstoryapp.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -14,7 +15,7 @@ object ApiConfig {
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://story-api.dicoding.dev/")
+            .baseUrl("${BuildConfig.APIStory}")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
