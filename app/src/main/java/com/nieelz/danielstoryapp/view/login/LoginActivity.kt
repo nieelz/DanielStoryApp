@@ -58,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun viewModel() {
 
-
         loginViewModel.loginUser.observe(this) { user ->
             loginViewModel.saveDataUserToLocal(
                 UserLogin(
