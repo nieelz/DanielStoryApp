@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -40,6 +41,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapStoryAdapter.On
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        val indonesia = LatLng(-0.789275,113.921326)
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(indonesia, 3f))
 
         mapUiSetting()
         getMyLocation()
@@ -140,7 +145,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapStoryAdapter.On
     }
 
     override fun onItemClicked(data: ListStoryItem) {
-        // kalau di klik ngapain
     }
 
 
