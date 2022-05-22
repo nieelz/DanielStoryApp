@@ -4,63 +4,88 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nieelz.danielstoryapp.R
 import com.nieelz.danielstoryapp.database.remote.response.ListStoryItem
 import com.nieelz.danielstoryapp.databinding.ActivityMainBinding
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import com.nieelz.danielstoryapp.view.add.StoryActivity
+import com.nieelz.danielstoryapp.view.detail.DetailActivity
+import com.nieelz.danielstoryapp.view.maps.MapsActivity
 import com.nieelz.danielstoryapp.view.welcome.WelcomeActivity
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModels { ViewModelFactory(this) }
     private lateinit var binding: ActivityMainBinding
     private var currentToken = ""
+    private lateinit var adapter2: StoryAdapter
+    private var listStory = arrayListOf<ListStoryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.title = "Story App"
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
 
         mainViewModel.getLocalUser()
 
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
 
         mainViewModel.user.observe(this) {
             currentToken = it.token
-            mainViewModel.getAllStories(it.token)
+            mainViewModel.story
             binding.nameTextView.text = getString(R.string.greeting, it.name)
-        }
-
-        mainViewModel.stories.observe(this) {
-            populateDataStories(it)
         }
 
         binding.buttonPost.setOnClickListener {
             launcherAddStory.launch(Intent(this, StoryActivity::class.java))
         }
-    }
 
-
-    private fun populateDataStories(it: List<ListStoryItem>) {
-        binding.rvStory.apply {
-            itemAnimator = DefaultItemAnimator()
-            adapter = StoryAdapter(this@MainActivity, it)
+        populateDataStories()
+        setContentView(binding.root)
+        lifecycleScope.launch {
+            adapter2.loadStateFlow.collect {
+                if (it.refresh is LoadState.NotLoading) {
+                    listStory.clear()
+                    listStory.addAll(adapter2.snapshot().items)
+                }
+            }
         }
     }
+
+
+    private fun populateDataStories() {
+        adapter2 = StoryAdapter()
+        binding.rvStory.layoutManager = LinearLayoutManager(this)
+
+        mainViewModel.story.observe(this@MainActivity) {
+            adapter2.submitData(lifecycle, it)
+
+            adapter2.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
+                override fun onItemClicked(data: ListStoryItem) {
+                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.EXTRA_STORY, data)
+                    startActivity(intent)
+                }
+
+            })
+
+        }
+        binding.rvStory.adapter = adapter2
+
+    }
+
 
     private val launcherAddStory = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == RESULT_OK) mainViewModel.getAllStories(currentToken)
+        if (it.resultCode == RESULT_OK) mainViewModel.story
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,15 +104,12 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.send_menu -> {
-                launcherAddStory.launch(Intent(this, StoryActivity::class.java))
+                launcherAddStory.launch(Intent(this, MapsActivity::class.java)
+                    .apply { putExtra("EXTRA_MAP", listStory) })
                 true
             }
             else -> true
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 

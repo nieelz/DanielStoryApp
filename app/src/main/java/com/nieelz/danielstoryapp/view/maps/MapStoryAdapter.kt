@@ -1,16 +1,15 @@
-package com.nieelz.danielstoryapp.view.main
+package com.nieelz.danielstoryapp.view.maps
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nieelz.danielstoryapp.database.remote.response.ListStoryItem
 import com.nieelz.danielstoryapp.databinding.RowStoryBinding
 
-
-class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class MapStoryAdapter(
+    private var listStoryItem: List<ListStoryItem>
+) : RecyclerView.Adapter<MapStoryAdapter.MyViewHolder>() {
 
     private lateinit var binding: RowStoryBinding
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -28,7 +27,6 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>
         return MyViewHolder(binding)
     }
 
-
     class MyViewHolder(private val binding: RowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ListStoryItem) {
@@ -40,8 +38,8 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val story = getItem(position)
-        holder.bind(story!!)
+        val story = listStoryItem[position]
+        holder.bind(story)
 
         holder.itemView.setOnClickListener {
             onItemClickCallback.onItemClicked(story)
@@ -49,21 +47,5 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>
 
     }
 
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
-            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(
-                oldItem: ListStoryItem,
-                newItem: ListStoryItem
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-        }
-    }
-
-
+    override fun getItemCount(): Int = listStoryItem.size
 }

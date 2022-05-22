@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.google.android.gms.maps.model.LatLng
 import com.nieelz.danielstoryapp.databinding.ActivityStoryBinding
 import com.nieelz.danielstoryapp.view.ViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -29,12 +30,12 @@ class StoryActivity : AppCompatActivity() {
 
     private var token = ""
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.title = "Post Story"
         super.onCreate(savedInstanceState)
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -112,7 +113,6 @@ class StoryActivity : AppCompatActivity() {
             val myFile = File(currentPhotoPath)
             val result = reduceFileImage(myFile)
             getFile = result
-
 
             binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(result.path))
         }

@@ -20,7 +20,12 @@ interface ApiService {
     fun registerStory(@Body body: BodyRegister): Call<RegisterResponse>
 
     @GET("/v1/stories")
-    fun getAllStory(@Header("Authorization") header: String): Call<StoryResponse>
+    suspend fun getAllStory(
+        @Header("Authorization") header : String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("location") location: Int = 1
+    ): StoryResponse
 
     @Multipart
     @POST("/v1/stories")

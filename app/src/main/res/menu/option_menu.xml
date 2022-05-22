@@ -4,7 +4,7 @@
     <group android:menuCategory="container">
         <item
             android:id="@+id/send_menu"
-            android:icon="@drawable/ic_send"
+            android:icon="@drawable/ic_map"
             android:title="@string/send"
             app:showAsAction="always" />
         <item

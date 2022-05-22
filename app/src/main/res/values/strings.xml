@@ -26,4 +26,10 @@
     <string name="preview_photo">Preview Photo</string>
     <string name="upload">Upload</string>
     <string name="type_image_description">Type Image Description</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
+    <string name="location">Location</string>
 </resources>
